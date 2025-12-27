@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum markerStatus {
+  NORMAL_RANGE
+  ABNORMAL_RANGE
+  EMERGENCY_RANGE
+  INVALID
+  null
+}
+
+model ProcessedEvents {
+  id        Int    @id @default(autoincrement())
+  logId     String
+  eventName String?
+  // event     Json?
+  source    String?
+  // eventData Json
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Users {
+ id                            String                        @id @unique @default(uuid())
+  role            String
+  userName       String
+  userEmail      String     @unique
+  password       String
+  refreshToken   String?
+  ownerHubspotId String?  @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Organs {
+  id                            String                        @id @unique @default(uuid())
+  organName          String          @unique
+  organNormalIcon   String
+  organAbnormalIcon String
+  organInactiveIcon String
+  OrganMarkers       OrganMarkers[]
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+}
+
+model OrganMarkers {
+  id                            String                        @id @unique @default(uuid())
+  organId         String
+  markerId        String
+  organs           Organs          @relation(fields: [organId], references: [id])
+  requiredMarkers RequiredMarkers @relation(fields: [markerId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model RequiredMarkers {
+  id                            String                        @id @unique @default(uuid())
+  testTypeId       String
+  markerName       String            
+  markerUnit       String?
+  isDynamic        Boolean? @default(false)
+  emergencyRangeLowerLimit              Float?
+  emergencyRangeUpperLimit              Float?
+  abnormalRangeLowerLimit              Float?
+  abnormalRangeUpperLimit              Float?
+  normalRangeLowerLimit              Float?
+  normalRangeUpperLimit              Float?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  OrganMarkers     OrganMarkers[]
+  userMarkerTable  UserMarkers[]
+  testType         TestType            @relation(fields: [testTypeId], references: [id])
+
+}
+
+model TestType {
+ id                            String                        @id @unique @default(uuid())
+  testType        String         @unique
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  requiredMarkers RequiredMarkers[]
+}
+
+model Tests {
+ id                            String                        @id @unique @default(uuid())
+  userHubspotId      String       
+  ticketId           String?
+  userId            String
+  digitisationOwner  String?
+  qaOwner            String?
+  digitisationStatus String?
+  testType            String?
+  validity            String?
+  reportSource       String?
+  reportData          String?
+  isSafeUrl         Boolean?
+  partnerName       String?
+  isDynamic       Boolean @default(false)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  testMetaData      TestMetaData[]
+  userMarkerTable   UserMarkers[]
+  user              UserDetials @relation(fields: [userId],references: [id])
+  diagnosis         Diagnosis[]
+}
+model MetaData {
+  id            String                        @id @unique @default(uuid())
+  markerName    String?          
+  markerValue   String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  // testMetaData testMetaData[]
+}
+
+model TestMetaData {
+  id          String                        @id  @default(uuid())
+  testId      String
+  metaDataId  String                
+  markerName  String
+  markerValue String?
+  comment     String?
+  isActive     Boolean  @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Tests        Tests     @relation(fields: [testId], references: [id])
+  // metaData   MetaData @relation(fields: [metaDataId], references: [id])
+}
+
+model UserMarkers {
+  id              String                        @id @unique @default(uuid())
+  testId          String
+  markerId        String
+  status         markerStatus?
+  comment         String?
+  value           String?
+  isActive          Boolean          @default(true)
+  isInvalid       Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  Tests            Tests            @relation(fields: [testId], references: [id])
+  requiredMarkers RequiredMarkers @relation(fields: [markerId], references: [id])
+}
+
+model UserDetials {
+  id  String                       @id @unique @default(uuid())
+  hubspotId     String                 
+  userId        String?
+  kenkoScore    Int?
+  bmi           Float?
+  emailId       String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  Tests         Tests[]
+}
+
+model Diagnosis {
+  id  String                       @id @unique @default(uuid())
+  organId String
+  organName String
+  organCurrentIcon String
+  isActive Boolean @default(true)
+  organOutOfRange Int
+  organNormalRange Int
+  organInvalidRange Int
+  testId String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt    
+  tests   Tests    @relation(fields: [testId],references: [id])
+}
+
+ 

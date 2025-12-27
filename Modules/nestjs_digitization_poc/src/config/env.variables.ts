@@ -1,0 +1,30 @@
+export default () => ({
+    nodeEnv: process.env.NODE_ENV,
+    databaseUrl: process.env.DATABASE_URL,
+    port: process.env.PORT,
+    baseUrl: process.env.BASE_URL,
+    appName: process.env.APP_NAME,
+    rabbitmqUri: process.env.RABBITMQ_URI,
+    zohoBook: {
+      refreshToken: process.env.ZOHO_BOOK_REFRESH_TOKEN,
+      clientId: process.env.ZOHO_BOOK_CLIENT_ID,
+      clientSecret: process.env.ZOHO_BOOK_CLIENT_SECRET,
+      orgId: process.env.ZOHO_BOOK_ORG_ID,
+      baseUrl: process.env.ZOHO_BOOK_BASE_URL,
+    },
+    hubspot: {
+      baseUrl: process.env.HUBSPOT_BASE_URL,
+      baseUrlCRM: process.env.HUBSPOT_BASE_URL_CRM,
+      apiKey: process.env.HUBSPOT_API_KEY,
+      orgId: process.env.HUBSPOT_ORG_ID,
+      testUserContactId: process.env.HUBSPOT_TEST_USER_CONTACT_ID,
+    },
+    razorpay: {
+      keyId: process.env.RAZORPAY_KEY_ID,
+      keySecret: process.env.RAZORPAY_KEY_SECRET,
+    },
+    mainBackendUrl: process.env.INTERNAL_SERVICE_KWB,
+    upiMandateLimit: process.env.UPI_MANDATE_LIMIT,
+    redisHost: process.env.REDIS_HOST,
+    redisPort: process.env.REDIS_PORT,
+  });

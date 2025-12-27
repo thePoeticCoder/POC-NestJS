@@ -1,0 +1,34 @@
+{
+    "application": {
+        "name": "payment-service",
+        "port": 3001,
+        "base_url": "https://api.dev-kenko-health.in"
+    },
+    "redis": {
+        "host": "prod-redis.ef4hpd.ng.0001.aps1.cache.amazonaws.com",
+        "port": 6379
+    },
+    "rabbitmq": {
+        "protocol": "amqps",
+        "user_name": "kenko",
+        "password": "Kenko123",
+        "end_point": "b-8273910d-3e56-4578-9a74-43873579ca2c.mq.ap-south-1.amazonaws.com:5671"
+    },
+    "zoho_book": {
+        "refresh_token": "1000.60f65d41c886d8401e6108f3cef8aa34.48d34e5058bdf6b6684def0853dc6b71",
+        "zoho_client_id": "1000.QFMOH2N2YNVISY1N7URGL3A3H1VZ9E",
+        "zoho_client_secret": "4b6cf4def2a64e4caf2312c6a1d4674ff900efe9e0",
+        "zoho_org_id": "60009598877",
+        "zoho_book_base_url": "https://books.zoho.in/api/v3"
+    },
+    "hubspot": {
+        "base_url": "https://api.hubspot.com",
+        "base_url_crm": "https://app.hubspot.com",
+        "api_key": "0d94dfe4-5d36-4991-8167-be3c10dae479",
+        "org_id": "8220948",
+        "test_user_contact_id": "10730401"
+    },
+    "internal_service_urls": {
+        "main_backend_url": "https://api.kenkohealth.in"
+    }
+}
